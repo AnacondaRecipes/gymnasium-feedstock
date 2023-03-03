@@ -17,7 +17,9 @@ requirements:
     - python
     - pip
     - cloudpickle
-    - numpy
+    - numpy   1.19   # [py<310]
+    - numpy   1.21   # [py==310]
+    - numpy   1.23   # [py>=311]
     - setuptools
     - wheel
   run:
@@ -31,7 +33,9 @@ outputs:
       host:
         - python
         - cloudpickle
-        - numpy
+        - numpy   1.19   # [py<310]
+        - numpy   1.21   # [py==310]
+        - numpy   1.23   # [py>=311]
         - pip
         - setuptools
         - wheel
@@ -40,7 +44,7 @@ outputs:
         - cloudpickle >=1.2.0
         - gymnasium-notices
         - importlib_metadata >=4.8.1  # [py<=39]
-        - numpy >=1.18.0
+        - {{ pin_compatible('numpy') }}
     test:
       imports:
         - gymnasium
@@ -201,6 +205,7 @@ about:
     This is a fork of OpenAI's Gym library by the maintainers 
     (OpenAI handed over maintenance a few years ago to an outside team), and is where future maintenance will occur going forward
   dev_url: https://github.com/Farama-Foundation/Gymnasium
+  doc_url: https://gymnasium.farama.org/
 
 extra:
   recipe-maintainers:
