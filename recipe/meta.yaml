@@ -31,7 +31,9 @@ outputs:
       host:
         - python
         - cloudpickle
-        - numpy
+        - numpy 1.19   # [py<310]
+        - numpy 1.21   # [py==310]
+        - numpy 1.23   # [py>=311]
         - pip
         - setuptools
         - wheel
@@ -40,7 +42,6 @@ outputs:
         - cloudpickle >=1.2.0
         - gymnasium-notices
         - importlib_metadata >=4.8.1  # [py<=39]
-        - numpy >=1.18.0
         - {{ pin_compatible('numpy') }}
     test:
       imports:
