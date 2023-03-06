@@ -1,4 +1,4 @@
-{% set version = "0.27.1" %}
+{% set version = "0.26.3" %}
 
 package:
   name: gymnasium-split
@@ -6,52 +6,50 @@ package:
 
 source:
   url: https://github.com/Farama-Foundation/Gymnasium/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: bac0e8e1a9c672568d8673ec34588eb80807a2067964c3dc90a97d7fb2f51460
+  sha256: bdb641c4cde0916aca339f736764b89077cdc147ed274a2ea6023c043c8d48e7
 
 build:
   number: 0
 
 # Need these up here for conda-smithy to handle them properly.
 requirements:
-  build:
-    - python                                 # [build_platform != target_platform]
-    - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-    - numpy                                  # [build_platform != target_platform]
   host:
     - python
     - pip
+    - cloudpickle
+    - numpy 1.19   # [py<310]
+    - numpy 1.21   # [py==310]
+    - numpy 1.23   # [py>=311]
     - setuptools
     - wheel
-  run:
-    - python
 
 outputs:
   - name: gymnasium
     build:
       script: {{ PYTHON }} -m pip install . -vv --no-deps
     requirements:
-      build:
-        - python                                 # [build_platform != target_platform]
-        - cross-python_{{ target_platform }}     # [build_platform != target_platform]
-        - numpy                                  # [build_platform != target_platform]
       host:
         - python
+        - cloudpickle
+        - numpy 1.19   # [py<310]
+        - numpy 1.21   # [py==310]
+        - numpy 1.23   # [py>=311]
         - pip
-        - cloudpickle >=1.2.0
-        - numpy
+        - setuptools
+        - wheel
       run:
         - python
         - cloudpickle >=1.2.0
         - gymnasium-notices
-        - numpy
-        - jax-jumpy
-        - typing_extensions
         - importlib_metadata >=4.8.1  # [py<=39]
+        - {{ pin_compatible('numpy') }}
     test:
       imports:
         - gymnasium
 
   - name: gymnasium-all
+    build:
+      skip: True
     requirements:
       host:
         - python
@@ -95,6 +93,9 @@ outputs:
         - gymnasium.envs.atari
 
   - name: gymnasium-box2d
+    build:
+      # we currently don't have box2d-py
+      skip: true
     requirements:
       host:
         - python
@@ -109,6 +110,9 @@ outputs:
         - gymnasium.envs.box2d
 
   - name: gymnasium-classic_control
+    build:
+      # we currently don't have pygame
+      skip: true
     requirements:
       host:
         - python
@@ -121,6 +125,9 @@ outputs:
         - gymnasium.envs.classic_control
 
   - name: gymnasium-mujoco
+    build:
+      # we currently don't have mujoco-python
+      skip: true
     requirements:
       host:
         - python
@@ -151,6 +158,9 @@ outputs:
         - gymnasium.envs.mujoco
 
   - name: gymnasium-toy_text
+    build:
+      # we currently don't have pygame
+      skip: true
     requirements:
       host:
         - python
@@ -163,6 +173,9 @@ outputs:
         - gymnasium.envs.toy_text
 
   - name: gymnasium-other
+    build:
+      # we currently don't have moviepy
+      skip: true
     requirements:
       host:
         - python
@@ -183,7 +196,14 @@ about:
   license_family: MIT
   license_file: LICENSE
   summary: A standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)
+  description: |
+    Gymnasium is an open source Python library for developing and comparing reinforcement learning algorithms 
+    by providing a standard API to communicate between learning algorithms and environments, 
+    as well as a standard set of environments compliant with that API. 
+    This is a fork of OpenAI's Gym library by the maintainers 
+    (OpenAI handed over maintenance a few years ago to an outside team), and is where future maintenance will occur going forward
   dev_url: https://github.com/Farama-Foundation/Gymnasium
+  doc_url: https://gymnasium.farama.org/
 
 extra:
   recipe-maintainers:
