@@ -1,4 +1,4 @@
-{% set version = "0.26.3" %}
+{% set version = "0.28.1" %}
 
 package:
   name: gymnasium-split
@@ -6,7 +6,7 @@ package:
 
 source:
   url: https://github.com/Farama-Foundation/Gymnasium/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: bdb641c4cde0916aca339f736764b89077cdc147ed274a2ea6023c043c8d48e7
+  sha256: 59dddc9ba631ed353cb6983cb3fff113c8619ef03142fd8474aa56bfccf9c424
 
 build:
   number: 0
@@ -26,23 +26,20 @@ requirements:
 outputs:
   - name: gymnasium
     build:
-      script: {{ PYTHON }} -m pip install . -vv --no-deps
+      script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
     requirements:
       host:
         - python
-        - cloudpickle
-        - numpy 1.19   # [py<310]
-        - numpy 1.21   # [py==310]
-        - numpy 1.23   # [py>=311]
         - pip
         - setuptools
         - wheel
       run:
         - python
         - cloudpickle >=1.2.0
-        - gymnasium-notices
         - importlib_metadata >=4.8.1  # [py<=39]
-        - {{ pin_compatible('numpy') }}
+        - numpy >=1.21.0
+        - typing-extensions >=4.3.0
+        - farama-notifications >=0.0.1
     test:
       imports:
         - gymnasium
@@ -134,7 +131,7 @@ outputs:
       run:
         - python
         - {{ pin_subpackage('gymnasium', exact=True) }}
-        - mujoco-python >=2.2.0,<2.4
+        - mujoco-python >=2.3.2,<2.4
         - imageio >=2.14.1
     test:
       imports:
