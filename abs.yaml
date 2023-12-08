@@ -1,4 +1,1 @@
-channels:
-  - https://staging.continuum.io/prefect/fs/gymnasium-notices-feedstock/pr2/e805ee6
-
 aggregate_check: false
