@@ -9,19 +9,12 @@ source:
   sha256: 59dddc9ba631ed353cb6983cb3fff113c8619ef03142fd8474aa56bfccf9c424
 
 build:
-  number: 0
+  number: 1
 
 # Need these up here for conda-smithy to handle them properly.
 requirements:
   host:
     - python
-    - pip
-    - cloudpickle
-    - numpy 1.19   # [py<310]
-    - numpy 1.21   # [py==310]
-    - numpy 1.23   # [py>=311]
-    - setuptools
-    - wheel
 
 outputs:
   - name: gymnasium
