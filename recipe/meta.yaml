@@ -1,188 +1,71 @@
-{% set version = "0.28.1" %}
+{% set name = "gymnasium" %}
+{% set version = "1.2.3" %}
 
 package:
-  name: gymnasium-split
+  name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://github.com/Farama-Foundation/Gymnasium/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 59dddc9ba631ed353cb6983cb3fff113c8619ef03142fd8474aa56bfccf9c424
+  sha256: b2a7f6d9c25eb0f36734429f856bc195e30e57d3226f0b1927d267054bd7a4bb
 
 build:
-  number: 1
+  number: 0
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<310]
 
-# Need these up here for conda-smithy to handle them properly.
 requirements:
   host:
+    - pip
     - python
+    - wheel
+    - setuptools >=61.0.0
+  run:
+    - python
+    - numpy >=1.21.0
+    - cloudpickle >=1.2.0
+    - typing_extensions >=4.3.0
+    - farama-notifications >=0.0.1
+  run_constrained:
+    # atari
+    - ale_py >=0.9
+    # box2d
+    - box2d ==2.3.10
+    - pygame >=2.1.3
+    - swig ==4.*
+    # mujoco
+    - mujoco >=2.1.5
+    - imageio >=2.14.1
+    - packaging >=23.0
+    # jax
+    - jax >=0.4.16
+    - jaxlib >=0.4.16
+    - flax >=0.5.0
+    - array-api-compat >=1.11.0
+    # torch
+    - pytorch >=1.13.0
+    # array-api
+    - packaging >=23.0
+    # other
+    - moviepy >=1.0.0
+    - matplotlib-base >=3.0
+    - opencv-python >=3.0
+    - seaborn >=0.13
 
-outputs:
-  - name: gymnasium
-    build:
-      script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
-    requirements:
-      host:
-        - python
-        - pip
-        - setuptools
-        - wheel
-      run:
-        - python
-        - cloudpickle >=1.2.0
-        - importlib_metadata >=4.8.1  # [py<=39]
-        - numpy >=1.21.0
-        - typing-extensions >=4.3.0
-        - farama-notifications >=0.0.1
-        - jax-jumpy >=1.0.0
-    test:
-      imports:
-        - gymnasium
-
-  - name: gymnasium-all
-    build:
-      skip: True
-    requirements:
-      host:
-        - python
-      run:
-        - python
-        # see below
-        # - {{ pin_subpackage('gymnasium-atari', exact=True) }}
-        - {{ pin_subpackage('gymnasium-box2d', exact=True) }}
-        - {{ pin_subpackage('gymnasium-classic_control', exact=True) }}
-        - {{ pin_subpackage('gymnasium-mujoco', exact=True) }}
-        # see below
-        # - {{ pin_subpackage('gymnasium-mujoco_py', exact=True) }}
-        - {{ pin_subpackage('gymnasium-toy_text', exact=True) }}
-        - {{ pin_subpackage('gymnasium-other', exact=True) }}
-    test:
-      source_files:
-        - tests/
-      requires:
-        - mock
-        - pytest
-        - pip
-      commands:
-        - pip check
-        # TODO: figure out segfaults
-        # - pytest -v tests/
-
-  - name: gymnasium-atari
-    build:
-      # needs some as-yet unsolved packaging shenanigans
-      # to actually install gymnasium.envs.atari
-      skip: true
-    requirements:
-      host:
-        - python
-      run:
-        - python
-        - {{ pin_subpackage('gymnasium', exact=True) }}
-        - ale-py >=0.8.0,<0.9
-    test:
-      imports:
-        - gymnasium.envs.atari
-
-  - name: gymnasium-box2d
-    build:
-      # we currently don't have box2d-py
-      skip: true
-    requirements:
-      host:
-        - python
-        - swig ==4.*
-      run:
-        - python
-        - {{ pin_subpackage('gymnasium', exact=True) }}
-        - box2d-py ==2.3.*
-        - pygame ==2.1.*
-    test:
-      imports:
-        - gymnasium.envs.box2d
-
-  - name: gymnasium-classic_control
-    build:
-      # we currently don't have pygame
-      skip: true
-    requirements:
-      host:
-        - python
-      run:
-        - python
-        - {{ pin_subpackage('gymnasium', exact=True) }}
-        - pygame ==2.1.*
-    test:
-      imports:
-        - gymnasium.envs.classic_control
-
-  - name: gymnasium-mujoco
-    build:
-      # we currently don't have mujoco-python
-      skip: true
-    requirements:
-      host:
-        - python
-      run:
-        - python
-        - {{ pin_subpackage('gymnasium', exact=True) }}
-        - mujoco-python >=2.3.2,<2.4
-        - imageio >=2.14.1
-    test:
-      imports:
-        - gymnasium.envs.mujoco
-
-  - name: gymnasium-mujoco_py
-    build:
-      # we currently don't have https://github.com/openai/mujoco-py
-      # in conda-forge, and it'll be replaced by mujoco anyway
-      skip: true
-    requirements:
-      host:
-        - python
-      run:
-        - python
-        - {{ pin_subpackage('gymnasium', exact=True) }}
-        - mujoco-py >=2.1,<2.2
-        - imageio >=2.14.1
-    test:
-      imports:
-        - gymnasium.envs.mujoco
-
-  - name: gymnasium-toy_text
-    build:
-      # we currently don't have pygame
-      skip: true
-    requirements:
-      host:
-        - python
-      run:
-        - python
-        - {{ pin_subpackage('gymnasium', exact=True) }}
-        - pygame ==2.1.*
-    test:
-      imports:
-        - gymnasium.envs.toy_text
-
-  - name: gymnasium-other
-    build:
-      # we currently don't have moviepy
-      skip: true
-    requirements:
-      host:
-        - python
-      run:
-        - python
-        - {{ pin_subpackage('gymnasium', exact=True) }}
-        - lz4 >=3.1.0
-        - matplotlib >=3.0
-        - moviepy >=1.0
-        - py-opencv >=3.0
-    test:
-      imports:
-        # There are no tests in the source code for gymnasium-other
+test:
+  source_files:
+    - tests
+  imports:
+    - gymnasium
+  commands:
+    - pip check
+    - pytest -v tests/test_core.py
+  requires:
+    - pip
+    - pytest
 
 about:
-  home: https://gymnasium.farama.org/
+  home: https://farama.org
   license: MIT
   license_family: MIT
   license_file: LICENSE
@@ -194,7 +77,7 @@ about:
     This is a fork of OpenAI's Gym library by the maintainers 
     (OpenAI handed over maintenance a few years ago to an outside team), and is where future maintenance will occur going forward
   dev_url: https://github.com/Farama-Foundation/Gymnasium
-  doc_url: https://gymnasium.farama.org/
+  doc_url: https://gymnasium.farama.org
 
 extra:
   recipe-maintainers:
