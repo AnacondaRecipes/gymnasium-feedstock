@@ -1,5 +1,5 @@
 {% set name = "gymnasium" %}
-{% set version = "1.3.0" %}
+{% set version = "1.4.0" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/Farama-Foundation/Gymnasium/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 600df166dd6aca13281130a80eff1a23f4f867a5c919ed614743806e7e5efeaa
+  sha256: c34c99e18d4121aff526b0768e50b30acbe23d05c7285fc681655406d527359c
 
 build:
   number: 0
@@ -18,13 +18,12 @@ requirements:
   host:
     - pip
     - python
-    - wheel
     - setuptools >=61.0.0
   run:
     - python
-    - numpy >=1.21.0
+    - numpy >=1.22.0
     - cloudpickle >=1.2.0
-    - typing_extensions >=4.3.0
+    - typing_extensions >=4.12.0
     - farama-notifications >=0.0.1
   run_constrained:
     # atari
@@ -49,6 +48,7 @@ requirements:
     - matplotlib-base >=3.0
     - opencv-python >=3.0
     - seaborn >=0.13
+    - opencv >=3.0
 
 test:
   source_files:
@@ -69,10 +69,10 @@ about:
   license_file: LICENSE
   summary: A standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)
   description: |
-    Gymnasium is an open source Python library for developing and comparing reinforcement learning algorithms 
-    by providing a standard API to communicate between learning algorithms and environments, 
-    as well as a standard set of environments compliant with that API. 
-    This is a fork of OpenAI's Gym library by the maintainers 
+    Gymnasium is an open source Python library for developing and comparing reinforcement learning algorithms
+    by providing a standard API to communicate between learning algorithms and environments,
+    as well as a standard set of environments compliant with that API.
+    This is a fork of OpenAI's Gym library by the maintainers
     (OpenAI handed over maintenance a few years ago to an outside team), and is where future maintenance will occur going forward
   dev_url: https://github.com/Farama-Foundation/Gymnasium
   doc_url: https://gymnasium.farama.org
