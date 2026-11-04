@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://github.com/Farama-Foundation/Gymnasium/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: a59b1ca86bae3e6ce977d34f7f432a23fedd000476ba27f8417fba7bdedd0292
+  sha256: f6d2a542fdcd643a2efaeed5bac645f6bfd01911e891fcd644ae68d7836d764f
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   skip: true  # [py<310]
 
